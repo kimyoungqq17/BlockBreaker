@@ -1,0 +1,48 @@
+use Block223.ump;
+
+class PlayableGame{
+  gameStatus {
+    
+    notPublished{ // --initial psuedostate
+    
+      publish() -> onStandBy;
+    
+    }
+    
+    onStandBy{  // --game is not being played by user at current time.
+      
+      playGame() -> inPlay; //game is started from origional state.
+      continueGame() -> inPlay; //game is continued from previous state, handled by user selecting a game in view.
+      gameOver{
+        
+        viewHF() -> viewingHallOfFame;
+      
+      }
+      
+      deleteGame() -> notPublished;
+      
+      viewingHallOfFame{}
+    
+    }
+    
+    inPlay{  // --game is being played by user at current time.
+    
+            // Game still in play
+      blockHit [levelNotAlmostOver()] -> inPlay; // many blocks left
+      blockHit [levelAlmostOver()] -> onStandBy; // player hits the last block (1 block left to 0 blocks left).
+      blockHit [gameAlmostOver()] -> gameOver; // player hits the last block of the last level.
+      
+      movePaddle() -> inPlay;
+      paddleHit() -> inPlay;      
+      moveBall() -> inPlay;      
+      wallHit() -> inPlay;
+      
+            // Conditions to make game on on standby
+      paddleMiss() -> / {lives <= 0 || lives >= 3} gameOver; //prevent underflow with strict boundaries.
+      pause() -> onStandBy;
+        
+    }
+    
+      
+  }  
+}//$?[End_of_model]$?

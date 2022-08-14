@@ -1,0 +1,149 @@
+class PlayedGame {
+
+  // State Machine
+  
+  playStatus {
+    Ready {
+      entry / { doSetup(); }
+      play -> Moving;
+    }
+    Moving {
+      pause -> Paused;
+      move [hitPaddle()] / { doHitPaddleOrWall(); } -> Moving;
+      move [isOutOfBoundsAndLastLife()] / { doOutOfBounds(); } -> GameOver;
+      move [isOutOfBounds()] / { doOutOfBounds(); } -> Paused;
+      move [hitLastBlockAndLastLevel()] / { doHitBlock(); } -> GameOver;
+      move [hitLastBlock()] / { doHitBlockNextLevel(); } -> Ready;
+      move [hitBlock()] / { doHitBlock(); } -> Moving;
+      move [hitWall()] / { doHitPaddleOrWall(); } -> Moving;
+      move / { doHitNothingAndNotOutOfBounds(); } -> Moving;
+    }
+    Paused {
+      play -> Moving;
+    }
+    GameOver {
+      entry / { doGameOver(); }
+    }
+  }
+  
+  // Guards
+  
+  private boolean hitPaddle() {
+    // TODO implement
+ //   Bouncepoint bp = calculateBouncePointPaddle(); uncomment when needed
+ 
+    setBounce(bp);
+    return false;
+  }
+
+  private boolean isOutOfBoundsAndLastLife() {
+	   boolean outOfBounds = false;
+	   if (lives == 1) {
+		   outOfBounds = isOutOfBounds();
+	   }
+    return outOfBounds;
+  }
+
+  private boolean isOutOfBounds() {
+	   //check if ball position is out of bounds
+	   boolean outOfBounds = false;
+	   if(currentBallY + Ball.BALL_DIAMETER >= Game.PLAY_AREA_SIDE) {
+		
+		   outOfBounds = true;
+	   }else {
+		   isOutOfBounds();				//depending on if looped somewhere else??????????????
+		   								//maybe return false otherwise!!!!!!!!!!!!!!!!
+	   }
+	   
+	   return outOfBounds;
+    }
+  
+  private boolean hitLastBlockAndLastLevel() {
+    // TODO implement
+    return false;
+  }
+  
+  private boolean hitLastBlock(){
+    // TODO implement
+    return false;
+  }
+  
+  private boolean hitBlock() {
+    // TODO implement
+    return false;
+  }
+  
+  private boolean hitWall() {
+    // TODO implement
+    return false;
+  }
+  
+  // Actions
+  
+  private void doSetup(){
+	   resetGame();
+	   resetCurrentBallX(); resetCurrentBallY(); resetBallDirectionX(); resetBallDirectionY(); resetCurrentPaddleX(); getGame();
+	   Level assignment = game.getLevel(currentLevel - 1);
+	   List<BlockAssignment> assignments = assignment.getBlockAssignments();
+	   for(BlockAssignment a: assignments) {
+		   PlayedBlockAssignment pblock = new PlayedBlockAssignment(Game.WALL_PADDING + (Block.SIZE +
+	               Game.COLUMNS_PADDING) * (a.getGridHorizontalPosition() - 1), Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) *
+	               (a.getGridVerticalPosition() - 1), a.getBlock(), this);
+	   }
+			   
+	   while (numberOfBlocks() < game.getNrBlocksPerLevel()) {
+	       int x = ThreadLocalRandom.current().nextInt(1, 15);
+	       int y = ThreadLocalRandom.current().nextInt(1, 15);
+	       for (BlockAssignment ablockAssignment : assignments) {
+	         if (ablockAssignment.getGridHorizontalPosition() == x && ablockAssignment.getGridVerticalPosition() == y) {
+	           x = x++;
+	           y = y++;
+	         }
+	         if (ablockAssignment.getGridHorizontalPosition() != x && ablockAssignment.getGridVerticalPosition() != y) {
+	           PlayedBlockAssignment pblock = new PlayedBlockAssignment(x, y, game.getRandomBlock(), this);
+	         }
+	       }
+	     }
+	   
+  }
+  
+  private void doHitPaddleOrWall() {
+    // TODO implement
+    bounceBall();
+  }
+
+  private void doOutOfBounds() {
+	   setLives(lives-1);
+	   resetGame();
+    }
+
+  private void doHitBlock() {
+    // TODO implement
+  }
+
+  private void doHitBlockNextLevel() {
+    // TODO implement
+  }
+
+  private void doHitNothingAndNotOutOfBounds() {
+    // TODO implement
+  }
+  private void doGameOver() {
+	   Block223 block223 = new Block223();
+	   block223= Block223Application.getBlock223();
+	   Player p = getPlayer();
+	   if(p!=null) {
+		   Game game = getGame();
+		   HallOfFameEntry hof = new HallOfFameEntry(score, playername, p, game, block223);	
+		   game.setMostRecentEntry(hof);
+		   game.delete();
+	   }
+     }
+
+	private BouncePoint calculateBouncePointPaddle(){
+	
+	//if bouncepoint is not found return null
+	// if x value of ball is greater than left side of rectangle return null(nobouncepoint found)
+	//if(ballRect.intersects (paddleRect) then ball.set dy(-ball.getdy)
+	}
+}

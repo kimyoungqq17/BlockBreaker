@@ -1,0 +1,180 @@
+namespace ca.mcgill.ecse223.block.model;
+
+class Block223 {
+  1 <@>- * Player;
+  1 <@>- * Admin;
+  1 <@>- * Game;
+}
+
+class Player {
+  String name;
+  String password;
+  1 -- * Playthrough;
+}
+
+class Admin {
+    isA Player;
+String password;
+  1 -- * GameSetting;
+}
+
+class GameSetting {
+  Integer minBallSpeed;
+  Integer ballSpeedIncreaseFactor;
+  Integer minPaddleLength;
+  Integer maxPaddleLength;
+  Integer gameFrameSizeX;
+  Integer gameFrameSizeY;
+  immutable Integer numLevels;
+  immutable Integer numBlocks;
+  const Integer MAXLEVELS = 99;
+  const Integer MINFRAMESIZE = 200;
+  const Integer MAXFRAMESIZE = 500;
+}
+
+class Playthrough {
+  Integer score;
+  Integer numLivesLeft;
+}
+
+class Game {
+  String name;
+  1 -- 1 GameSetting;
+  1 <@>- 1 HallOfFame;
+  1 <@>- * Playthrough;
+  1 <@>- * Level;
+}
+
+class HallOfFame {
+  
+  1 -- * Playthrough;
+}
+
+class Level {
+  Integer levelNumber;
+  Boolean isRandomGrid;
+  1 <@>- 1 Paddle;
+}
+
+class Paddle {
+  const Integer WIDTH = 5;
+  Integer length;
+  Integer speed;
+}
+
+class Ball {
+  const Integer DIAMETER = 10;
+  Integer speed;
+  Double positionX;
+  Double positionY;
+  1 -<@> 1 Level;
+}
+
+class BlockSelection {
+  
+  1 -<@> 1 Game;
+}
+
+class Block {
+  const Integer SIZE = 20;
+  String color;
+  Integer pointValue;
+  * -<@> 1 BlockSelection;
+  * -- 1 BlockColumn;
+}
+
+class BlockGrid {
+  1 <@>- * BlockColumn;
+  1 -<@> 1 Level;
+}
+
+class BlockColumn {
+  
+}//$?[End_of_model]$?
+
+class Admin
+{
+  position 1037 128 138 39;
+  position.association Admin__GameSetting 63,56 121,0;
+}
+
+class GameSetting
+{
+  position 918 219 247 175;
+}
+
+class Playthrough
+{
+  position 570 77 172 73;
+}
+
+class Game
+{
+  position 559 245 112 56;
+  position.association Game__GameSetting 112,26 0,52;
+  position.association Game__HallOfFame 18,0 93,39;
+  position.association Game__Playthrough 36,0 112,73;
+  position.association Game__Level 21,56 116,0;
+}
+
+class HallOfFame
+{
+  position 368 134 109 39;
+  position.association HallOfFame__Playthrough 109,19 0,49;
+}
+
+class Level
+{
+  position 376 355 167 56;
+  position.association Level__Paddle 167,21 0,37;
+}
+
+class Paddle
+{
+  position 686 303 125 73;
+}
+
+class Ball
+{
+  position 706 410 143 90;
+  position.association Ball__Level 0,40 167,72;
+}
+
+class BlockSelection
+{
+  position 346 488 109 39;
+  position.association BlockSelection__Level 78,0 46,56;
+}
+
+class Block
+{
+  position 112 401 109 39;
+  position.association Block__BlockSelection 153,48 0,12;
+  position.association Block__BlockColumn 53,0 71,39;
+}
+
+class BlockGrid
+{
+  position 316 264 109 39;
+  position.association BlockColumn__BlockGrid 0,15 109,16;
+  position.association BlockGrid__Level 94,39 15,0;
+}
+
+class Block223
+{
+  position 1090 22 109 39;
+  position.association Block223__Player 0,13 138,26;
+  position.association Admin__Block223 66,39 107,0;
+}
+
+class Player
+{
+  position 848 17 138 73;
+  position.association Player__Playthrough 0,47 172,35;
+}
+
+class BlockColumn
+{
+  position 108 299 109 39;
+  position.association BlockColumn__BlockGrid 67,39 52,0;
+}

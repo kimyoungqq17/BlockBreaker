@@ -1,0 +1,64 @@
+use Block223.ump;
+
+class Player {
+  1 -- * PlayableGame playablegames;
+ }
+
+class PlayableGame {
+  immutable String gameName;
+  const Integer RIGHT_WALL_X = 390;
+  const Integer LEFT_WALL_X = 0;
+  const Integer TOP_WALL_Y = 0;
+  const Integer BOTTOM_WALL_Y = 390;
+  const Integer PADDLE_TOP_Y = 360;
+  const Integer WALL_PADDING = 10;
+  const Integer COLUMNS_PADDING = 5;
+  const Integer ROW_PADDING = 2;
+  const Integer BALL_DIAMETER = 10;
+  Integer score;
+  Integer lives;
+  Integer ballX;
+  Integer ballY;
+  Double ballSpeedX;
+  Double ballSpeedY;
+  Integer paddleCenterX;
+  
+  1 <@>- * PlayableLevel playablelevels;
+}
+
+class PlayableLevel {
+  immutable Integer initialBallSpeedX;
+  immutable Integer initialBallSpeedY;
+  immutable Integer paddleLength;
+  
+  1 <@>- * PlayableBlock playableblocks;
+}
+
+class PlayableBlock {
+  const Integer SIZE = 20;
+  immutable Integer blockX;
+  immutable Integer blockY;
+  immutable Integer red;
+  immutable Integer green;
+  immutable Integer blue;
+  immutable Integer points;
+}
+
+class Block223 {
+  1 <@>- * HallOfFame hallsoffame;
+}
+
+class HallOfFame {
+  String gameName;
+  
+  1 <@>- * Score;
+}
+
+class Score {
+  String userName;
+  Integer score;
+}
+
+class Game {
+  Boolean isPublished;
+}//$?[End_of_model]$?
